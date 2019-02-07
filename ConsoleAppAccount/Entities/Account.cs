@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-
+using ConsoleAppAccount.Entities.Exceptions;
 namespace ConsoleAppAccount.Entities
 {
     class Account
@@ -26,11 +26,19 @@ namespace ConsoleAppAccount.Entities
         }
         public void WithDraw(double amount)
         {
+            if(Balance <=0 || Balance < amount)
+            {
+                throw new DomainException("Withdraw limit: Not enough balance");
+            }
+            if (WithDrawLimit < amount)
+            {
+                throw new DomainException("Withdraw limit: The amount exceeds withdraw limit");
+            }
             Balance -= amount;
         }
         public override string ToString()
         {
-            return "New balance" + Balance.ToString("F2", CultureInfo.InvariantCulture);
+            return "New balance: " + Balance.ToString("F2", CultureInfo.InvariantCulture);
         }
     }
 }
